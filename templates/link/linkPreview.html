@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{name}}'s Links</title>
+        <style>
+            body{font-family: 'Hanna', sans-serif;font-size: 1.5em;text-align: center;}
+            .url{background-color: black;
+                color: white;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                padding: 10px;
+                border-radius: 25px;
+                text-align: center;
+                position: static;
+                width: 60%;
+                height: fit-content;
+                overflow: hidden;
+                margin-left: 20%;
+            }
+            h1{font-size: 2em;margin-top: 30px; margin-bottom: 100px;text-align: center;}
+            .btn{
+                border: none;
+                color: white;
+                text-decoration: none;
+                text-align: center;
+                display: inline-block;
+                position: static;
+                width: 100%;
+                height: auto;
+                overflow: hidden;
+            }
+            .icon{
+                position: static;
+                text-align: left;
+                width: 100%;
+
+            }
+            .txt{
+                width: 90%;
+                margin-left: 1%;
+            }
+            img{
+                margin-bottom: 20px;
+                width: 32px;
+                height: 32px;
+            }
+            .urlinfom{
+                margin-top: 10%;
+                background-color: lightgray;
+                height: auto;
+                width: 60%;
+                border-radius: 25px;
+                margin-left: 20%;
+                text-align: center;
+                position: static;
+                overflow: hidden;
+                padding: 10px;
+
+            }
+            a{
+                text-decoration: none;
+                color: black;
+            }
+        </style>
+
+    </head>
+    <body>
+        <h1>{{name}}</h1>
+        {% for i in range(0, dt["count"]) %}
+        <div class="url">
+            <a href="{{dt["link"][i]}}" class="btn link">
+                <div class="btn icon">
+                    <img src="{{dt["host"][i] + "/favicon.ico"}}" alt="{{dt["host"][i]}}">
+
+                    <div class="btn txt">
+                        <p>{{dt["name"][i]}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        {% if setupBol %}
+        <div class="urlinfom">
+            <a href="http://www.dpp0900.com/link/{{name}}/{{randid}}">
+                <p>http://www.dpp0900.com/link/{{name}}/{{randid}}</p>
+            </a>
+        </div>
+        {% endif %}
+    </body>
+</html>

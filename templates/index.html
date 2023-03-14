@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body{
+                font-family: Raleway, RalewayOffline, sans-serif;
+                font-size: 1.5em;
+                text-align: center;
+            }
+            .prob{
+                background-color: gray;
+                text-align: center;
+                width: 20%;
+                margin-left: 40%;
+                margin-top: 2em;
+                padding-top: 0.01rem;
+                padding-bottom: 0.01rem;
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 5px;
+            }
+            .flag,.portf{
+                margin-top: 0.5rem;
+            }
+            a:not(.nocss){
+                font-size: 0.5em;
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 25px;
+                background-color: gray;
+                color: black;
+                text-decoration: none;
+                display: inline-block;
+                width: 60px;
+            }
+            h2{
+                
+                font-size: 1.5em; 
+                font-weight: 500;
+                margin-bottom: 0.5em;
+            }
+            input{
+                width: 150px;
+                height: 2em;
+                font-size: 0.7em;
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 25px;
+                text-align: center;
+                position: static;
+                background-color: white;
+                color: gray;
+            }
+            button{
+                height: 2em;
+                font-size: 0.7em;
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 25px;
+            }
+            p{
+                margin-top: 8;
+                margin-bottom: 0;
+            }
+            .blur{
+                text-shadow: 0px 0px 7px black;
+                color: transparent;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="prob">
+            <h2>Shock</h2>
+            <a href="prob">here</a>
+            {% if link %}
+            <p>
+            <a class="nocss" style="margin-top:5px; font-size: 0.5em;background-color: gray;color: black;text-decoration: none;" href="{{ link }}">{{link}}</a>
+            </p>
+            {% endif %}
+            <div class="portf">
+                <a href="portf">answer</a>
+            </div>
+            <div class="flag">
+                <form action="/" method="post">
+                    <input type="text" name="flag" id="flag">
+                    <button type="submit">제출</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

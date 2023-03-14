@@ -1,0 +1,96 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Link Setup</title>
+        <style>
+            body{
+                font-family: 'Hanna', sans-serif;
+                font-size: 1.5em;
+                text-align: center;
+            }
+            h1{
+                font-size: 2em;
+                margin-top: 30px;
+            }
+            input{
+                width: 200px;
+                height: 2em;
+                font-size: 0.7em;
+                border-color: gray;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 25px;
+                text-align: center;
+                position: static;
+                background-color: white;
+                color: gray;
+            }
+            .url{
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .addurl{
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+        </style>
+        <script>
+            var urlcount = 0;
+            function addurl(){
+                urlcount = parseInt(document.getElementById("count-" + urlcount).value) + 1;
+                var newDivElement = document.createElement("div")
+                newDivElement.setAttribute("class", "url");
+                newDivElement.setAttribute("id", "url-" + urlcount);
+
+                var prevdiv = document.getElementsByClassName("urls")[0];
+
+
+                var newLinkInputElement = document.createElement("input");
+                newLinkInputElement.setAttribute("type", "text");
+                newLinkInputElement.setAttribute("name", "linkNM-" + urlcount);
+                newLinkInputElement.setAttribute("placeholder", "어떤 링크인가요?");
+
+                var newUrlInputElement =document.createElement("input");
+                newUrlInputElement.setAttribute("type", "text");
+                newUrlInputElement.setAttribute("name", "url-" + urlcount);
+                newUrlInputElement.setAttribute("placeholder", "주소를 입력해주세요");
+
+                var newCountInputElement = document.createElement("input");
+                newCountInputElement.setAttribute("type", "hidden");
+                newCountInputElement.setAttribute("id", "count-" + urlcount);
+                newCountInputElement.setAttribute("value", urlcount);
+
+                var newDiv = prevdiv.appendChild(newDivElement);
+                var newLink = newDiv.appendChild(newLinkInputElement);
+                newDiv.innerHTML += "\n";
+                var newUrl = newDiv.appendChild(newUrlInputElement);
+                var newCount = newDiv.appendChild(newCountInputElement);
+            }
+        </script>
+    </head>
+    <body>
+        <h1>바로가기 설정</h1>
+        <form action="/link/setup" method="post">
+            <div class="name">
+                <input type="text" name="name" placeholder="어떤 이름으로 표시할까요?">
+            </div>
+            <div class="urls">
+                <div class="url" id="url-0">
+                    <input type="text" name="linkNM-0" placeholder="어떤 링크인가요?">
+                    <input type="text" name="url-0" placeholder="주소를 입력해주세요">
+                    <input type="hidden" id="count-0" value="0">
+                </div>
+            </div>
+            <div class="addurl">
+                <input type="button" value="링크 추가" onclick="addurl()">
+            </div>
+            <div class="submit">
+                <input type="submit" value="저장">
+            </div>
+
+        </form>
+        {% if err %}
+        <p> {{err}} </p>
+        {% endif %}
+    </body>
+</html>
