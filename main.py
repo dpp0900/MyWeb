@@ -42,6 +42,7 @@ class Sql:
         columns_str = "(" + ", ".join(self.data.keys()) + ")"
         values_str = "(" + ", ".join(["'{}'".format(value) for value in self.data.values()]) + ")"
         query = "INSERT INTO {} {} VALUES {}".format(self.table, columns_str, values_str)
+        print(query)
         return sql3.sqlcmd(query, self.db)
     def updateDB(self, where: str):
         set_str = ", ".join(["{}='{}'".format(key, value) for key, value in self.data.items()])
@@ -168,8 +169,8 @@ def log_redirect(redirect_id):
 def insertLink(name, label, link, host, count):
     link_sql = Sql("links")
     uid = random.randint(10000000,90000000)
-    while uid in link_sql.selectFromDB("id")[0]:
-        uid = random.randint(10000000,90000000)
+    #while uid in link_sql.selectFromDB("id")[0]:
+    #    uid = random.randint(10000000,90000000)
     link_sql.data = {
         "id" : uid,
         "name" : name,
@@ -209,7 +210,7 @@ def linkSetup():
             if reqdict["linkNM-"+str(i)] == "" or reqdict["linkNM-"+str(i)] == " ":
                 return render_template("link/linkSetup.html", err="주소이름이 비워저있습니다."), 200
             filterExp = re.compile(URLexpression)
-            if not filterExp.findall(reqdict["url-"+str(i)]):
+            if filterExp.findall(reqdict["url-"+str(i)]):
                 return render_template("link/linkSetup.html", err="주소가 잘못되었습니다."), 200
             if reqdict["url-"+str(i)] == "" or reqdict["url-"+str(i)] == " ":
                 return render_template("link/linkSetup.html", err="주소가 비워져있습니다."), 200
@@ -219,7 +220,7 @@ def linkSetup():
             dt["link"].append(reqdict["url-"+str(i)])
             dt["host"].append("http://" + reqdict["url-"+str(i)].split("/")[2])
             dt["count"] = linkcount
-        randid = insertLink(reqdict["name"], dt["name"], dt["link"], dt["host"], dt["count"])
+        randid = insertLink(reqdict["name"], str(dt["name"]).replace("\'","\""), str(dt["link"]).replace("\'","\""), str(dt["host"]).replace("\'","\""),str(dt["count"]).replace("\'","\""))
         return render_template("link/linkPreview.html", name=reqdict["name"], dt=dt, setupBol=True, randid=randid), 200
 
 '''test'''
@@ -229,7 +230,4 @@ def test():
 
 #-----Run-----#
 if __name__ == "__main__":
-    logger_sql = Sql("iplogger")
-    db = logger_sql.selectFromDB("deadtime")
-    print(db)
     app.run(debug=False, host="0.0.0.0", port="80")
