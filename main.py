@@ -42,7 +42,6 @@ class Sql:
         columns_str = "(" + ", ".join(self.data.keys()) + ")"
         values_str = "(" + ", ".join(["'{}'".format(value) for value in self.data.values()]) + ")"
         query = "INSERT INTO {} {} VALUES {}".format(self.table, columns_str, values_str)
-        print(query)
         return sql3.sqlcmd(query, self.db)
     def updateDB(self, where: str):
         set_str = ", ".join(["{}='{}'".format(key, value) for key, value in self.data.items()])
