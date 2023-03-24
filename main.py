@@ -183,10 +183,10 @@ def insertLink(name, label, link, host, count):
 @app.route("/link/<username>/<int:uid>")
 def link(uid,username):
     link_sql = Sql("links")
-    dt = link_sql.selectFromDB(where="id="+str(uid))
+    dt = link_sql.selectFromDB(where="id="+str(uid))[0]
     dt = {"name" : json.loads(dt[2].replace("'", "\"")), "link" : json.loads(dt[3].replace("'", "\"")), "host" : json.loads(dt[4].replace("'", "\"")), "count": dt[5]}
-    if dt and dt["name"] == username:
-        return render_template("linkView.html", name=username, dt=dt)
+    if dt:
+        return render_template("link/linkPreview.html", name=username, dt=dt)
     else:
         return "", 404
 @app.route("/link/setup", methods=["GET", "POST"])
