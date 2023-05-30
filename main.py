@@ -17,10 +17,10 @@ FilterRes = {
     "AllowEnglish" : "a-zA-Z", 
     "AllowNumber" : "0-9",
     "AllowKorean" : "ㄱ-ㅎㅏ-ㅣ가-힣", 
-    "AllowUnderScoreDot" : "\_\.",
+    "AllowUnderScoreDot" : "\\_\\.",
     "AllowSpace" : " "
 }
-URLexpression = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+URLexpression = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
 
 def MakeExpression(*options: str):
     return re.compile("[^"+"".join(options)+"]")
@@ -71,15 +71,17 @@ except:
                 container.stop()
                 container.remove()'''
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        return render_template("index.html", hint=0)
-    if request.method == "POST":
+        return render_template("index.html", hint=0), 200
+    elif request.method == "POST":
         if request.form.get("flag") == FLAG:
-            return "<script>alert(\"Correct!!\");location.href=\"portf\";</script>"
+            return "<script>alert(\"Correct!!\");location.href=\"portf\";</script>", 200
         else:
-            return "<script>alert(\"Wrong!!\");history.back(-1);</script>"
+            return "<script>alert(\"Wrong!!\");history.back(-1);</script>", 200
+    return "", 400
+
 @app.route("/hint")
 def hint():
     return render_template("index.html", pf="pf")
@@ -133,7 +135,7 @@ def iplogger():
         logger_sql = Sql("iplogger")
         logger_sql.data["id"] = random.randint(0,9999999)
         while logger_sql.data in [item for t in logger_sql.selectFromDB("id") for item in t]:
-            logger_sql.data = random.randint(0,9999999)
+            logger_sql.data["id"] = random.randint(0,9999999)
         logger_sql.data["redirect"] = request.form["redirect"]
         logger_sql.data["time"] = time.time()
         logger_sql.data["deadtime"] = logger_sql.data["time"] + 18000
@@ -141,17 +143,19 @@ def iplogger():
         logger_sql.insertIntoDB()
         with open("iplogger/" + str(logger_sql.data["id"]) + ".log", "w") as log_setup:
             log_setup.writelines("==========YourLog==========")
-        return render_template("iplogger/codeReturn.html", pscode=logger_sql.data["password"], link="http://www.dpp0900.com/redirect?cd=" + str(logger_sql.data["id"])), 200
+        return render_template("iplogger/codeReturn.html", pscode=logger_sql.data["password"], link="http://www.dpp0900.com/redirect?cd=" + str(logger_sql.data["id"]))
+    return "", 404
 @app.route("/logcheck")
 def logcheck():
     refreshlogs()
     if request.method == "GET":
-        return render_template("iplogger/logcheck.html")
+        return render_template("iplogger/logcheck.html"), 200
     elif request.method == "POST":
         logger_sql = Sql("iplogger")
         password = str(logger_sql.selectFromDB("id", "password=" + str(request.form["cod"]))[0][0])
         if (password + ".log") in os.listdir("iplogger/"):
             return open("iplogger/" + password + ".log", "r").read().replace("\n", "</br>"), 200
+    return "", 404
 @app.route("/redirec/<int:redirect_id>")
 def log_redirect(redirect_id):
     refreshlogs()
@@ -221,7 +225,7 @@ def linkSetup():
             dt["count"] = linkcount
         randid = insertLink(reqdict["name"], str(dt["name"]).replace("\'","\""), str(dt["link"]).replace("\'","\""), str(dt["host"]).replace("\'","\""),str(dt["count"]).replace("\'","\""))
         return render_template("link/linkPreview.html", name=reqdict["name"], dt=dt, setupBol=True, randid=randid), 200
-
+    return "", 404
 '''test'''
 @app.route("/test")
 def test():
@@ -229,4 +233,4 @@ def test():
 
 #-----Run-----#
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port="80")
+    app.run(debug=False, host="0.0.0.0", port=80)
